@@ -55,6 +55,21 @@ class SalesController extends Controller
         }return response()->json(['error' => 'not found'], 404);
     }
 
+
+    public function getNewSalesNo()
+    {
+        try {
+            $data = Sales::select('salesNo')->orderBy('created_at', 'desc')->first();
+            return $data;
+        } catch (QueryException $e) {
+            return response()->json(['error' => "failed"], 404);
+        }
+
+        if(count($data) > 0){
+            return response()->json($data);
+        }return response()->json(['error' => 'not found'], 404);
+    }
+
     public function getMonthlySalesTotal($month)
     {
         try {

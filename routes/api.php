@@ -132,6 +132,7 @@ Route::group([
 
     route::get('', 'SalesController@getSales');
     route::get('salesNo/{salesNo}', 'SalesController@getSalesNo');
+    route::get('newSales', 'SalesController@getNewSalesNo');
     route::get('monthlySales/{month}', 'SalesController@getMonthlySalesTotal');
     route::get('yearlySales/{year}', 'SalesController@getYearlySales');
     Route::post('addSales', 'SalesController@addSales');
