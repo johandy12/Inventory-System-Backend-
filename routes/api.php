@@ -119,7 +119,7 @@ Route::group([
     Route::post('addPurchase', 'PurchaseInvoiceController@addInvoice');
     Route::post('updatePurchase/{id}', 'PurchaseInvoiceController@updateInvoice');
     Route::delete('deletePurchase/{id}', 'PurchaseInvoiceController@deleteInvoice');
-    Route::delete('deletePurchaseNo/{salesNo}', 'PurcaseInvoiceController@deleteInvoiceNo');
+    Route::delete('deletePurchaseNo/{salesNo}', 'PurchaseInvoiceController@deleteInvoiceNo');
 
 });
 
@@ -149,9 +149,10 @@ Route::group([
 ], function ($router){
 
     route::get('', 'PurchasesController@getPurchases');
-    route::get('monthlyPurchases/{month}', 'PurchasesController@getMonthlyPurchasesTotal');
-    Route::post('addPurchases', 'PurchasesController@addPurchases');
-    Route::post('updatePurchases/{id}', 'PurchasesController@updatePurchases');
-    Route::delete('deletePurchases/{id}', 'PurchasesController@deletePurchases');
+    route::get('salesNo/{salesNo}', 'PurchasesController@getSalesNo');
+    route::get('monthlyPurchase/{month}', 'PurchasesController@getMonthlyPurchasesTotal');
+    Route::post('addPurchase', 'PurchasesController@addPurchases');
+    Route::post('updatePurchase/{salesNo}', 'PurchasesController@updatePurchases');
+    Route::delete('deletePurchase/{salesNo}', 'PurchasesController@deletePurchases');
 
 });

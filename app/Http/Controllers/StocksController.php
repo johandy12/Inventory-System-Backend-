@@ -24,7 +24,7 @@ class StocksController extends Controller
             $data = DB::table('stocks')
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
-                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.picture')
+                    ->select('type.type', 'brand.brand', 'stocks.id', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.picture', 'stocks.description')
                     ->orderBy('stocks.itemName', 'asc')
                     ->get();
             return $data;

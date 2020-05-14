@@ -50,7 +50,9 @@ class InvoiceController extends Controller
     {
         try {
             $data = Invoice::where('salesNo', $salesNo)->get();
-            return $data->sum('price');
+            return $data->sum(function ($detail) {
+                return $detail->price * $detail->quantity;
+            });
         } catch (QueryException $e) {
             return response()->json(['error' => 'not found'], 404);
         }

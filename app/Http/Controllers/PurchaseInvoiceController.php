@@ -32,17 +32,7 @@ class PurchaseInvoiceController extends Controller
     public function getInvoiceNo($salesNo)
     {
         try {
-            $data = PurchaseInvoice::where('salesNo', $salesNo)->orderBy('invoice.itemName', 'asc')->get();
-            /*
-            $data = DB::table('purchaseinvoice')
-                    ->join('type', 'type.id', '=', 'purchaseinvoice.type_id')
-                    ->join('brand', 'brand.id', '=', 'purchaseinvoice.brand_id')
-                    ->select('type.type', 'brand.brand', 'purchaseinvoice.salesNo', 'purchaseinvoice.ItemName', 
-                             'purchaseinvoice.quantity', 'purchaseinvoice.price')
-                    ->where('purchaseinvoice.salesNo', $salesNo)
-                    ->orderBy('purchaseinvoice.itemName', 'asc')
-                    ->get();
-            */
+            $data = PurchaseInvoice::where('salesNo', $salesNo)->orderBy('itemName', 'asc')->get();
             return $data;
         } catch (QueryException $e) {
             return response()->json(['error' => 'not found'], 404);
@@ -53,9 +43,9 @@ class PurchaseInvoiceController extends Controller
     {
         try {
             $data = PurchaseInvoice::where('salesNo', $salesNo)->get();
-            $array = Array();
-            $array['data'] = $data;
-            return $data->sum('price');
+            return $data->sum(function ($detail) {
+                return $detail->price * $detail->quantity;
+            });
         } catch (QueryException $e) {
             return response()->json(['error' => 'not found'], 404);
         }

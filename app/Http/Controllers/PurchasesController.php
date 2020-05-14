@@ -29,6 +29,20 @@ class PurchasesController extends Controller
         }return response()->json(['error' => 'not found'], 404);
     }
     
+    public function getSalesNo($salesNo)
+    {
+        try {
+            $data = Purchases::where('salesNo', $salesNo)->get();
+            return $data;
+        } catch (QueryException $e) {
+            return response()->json(['error' => "failed"], 404);
+        }
+
+        if(count($data) > 0){
+            return response()->json($data);
+        }return response()->json(['error' => 'not found'], 404);
+    }
+
     public function getMonthlyPurchasesTotal($month)
     {
         try {
@@ -94,7 +108,7 @@ class PurchasesController extends Controller
         }
     }
 
-    public function updatePurchases($id, Request $request)
+    public function updatePurchases($salesNo, Request $request)
     {
         $new =
         [
@@ -141,17 +155,17 @@ class PurchasesController extends Controller
         });
 
         try{
-            Purchases::where('id',$id)->update($new);
+            Purchases::where('salesNo', $salesNo)->update($new);
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
             return response()->json(["Error" => "not found"], 404);
         }
     }
 
-    public function deletePurchases($id)
+    public function deletePurchases($salesNo)
     {
         try{
-            $data = Purchases::where("id",$id)->delete(); 
+            $data = Purchases::where("salesNo", $salesNo)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
             return response()->json(["Error" => "not found"], 404);
