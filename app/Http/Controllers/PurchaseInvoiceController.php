@@ -25,7 +25,7 @@ class PurchaseInvoiceController extends Controller
             $array['data'] = $data;
             return $data;
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'file is empty'], 404);
         }
     }
     
@@ -35,7 +35,7 @@ class PurchaseInvoiceController extends Controller
             $data = PurchaseInvoice::where('salesNo', $salesNo)->orderBy('itemName', 'asc')->get();
             return $data;
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'no data is found'], 404);
         }
     }
 
@@ -47,7 +47,7 @@ class PurchaseInvoiceController extends Controller
                 return $detail->price * $detail->quantity;
             });
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'no data is found'], 404);
         }
     }
 

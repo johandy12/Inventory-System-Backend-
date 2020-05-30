@@ -17,7 +17,7 @@ class PurchaseInvoice extends Migration
             $table->increments('id');
             // $table->integer('type_id')->unsigned();
             // $table->integer('brand_id')->unsigned();
-            $table->integer('salesNo');
+            $table->integer('salesNo')->unique();
             $table->string('itemName');
             $table->string('quantity')->default('0');
             $table->string('price')->default('0');
