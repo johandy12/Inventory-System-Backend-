@@ -23,7 +23,7 @@ class InvoiceController extends Controller
             $data = Invoice::orderBy('updated_at', 'desc')->get();
             return $data;
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'file is empty'], 404);
         }
     }
     
@@ -42,7 +42,7 @@ class InvoiceController extends Controller
             */
             return $data;
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'no data is found'], 404);
         }
     }
 
@@ -50,9 +50,11 @@ class InvoiceController extends Controller
     {
         try {
             $data = Invoice::where('salesNo', $salesNo)->get();
-            return $data->sum('price');
+            return $data->sum(function ($detail) {
+                return $detail->price * $detail->quantity;
+            });
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'no data is found'], 404);
         }
     }
     
@@ -66,7 +68,7 @@ class InvoiceController extends Controller
                     ->get();
             return response()->json($data);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'not found'], 404);
+            return response()->json(['error' => 'file is empty'], 404);
         }
     }
 
@@ -140,7 +142,7 @@ class InvoiceController extends Controller
             Invoice::where('id',$id)->update($new);
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 
@@ -150,7 +152,7 @@ class InvoiceController extends Controller
             $data = Invoice::where("id",$id)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 
@@ -160,7 +162,7 @@ class InvoiceController extends Controller
             $data = Invoice::where("salesNo",$salesNo)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 }

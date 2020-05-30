@@ -26,7 +26,7 @@ class TypeController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'file is empty'], 404);
     }
 
     public function addType(Request $request)
@@ -65,7 +65,25 @@ class TypeController extends Controller
             Type::where('id',$id)->update($new);
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
+        }
+    }
+
+    public function updateType2($type, Request $request)
+    {
+        $request->validate([
+            'type'=> 'required',
+        ]);
+
+        $new = [
+            "type" => $request->type,
+        ];
+        
+        try{
+            Type::where('type',$type)->update($new);
+            return response()->json(["updated"], 200);
+        } catch(QueryException $a) {
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 
@@ -75,7 +93,17 @@ class TypeController extends Controller
             $data = Type::where("id",$id)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
+        }
+    }
+    
+    public function deleteType2($type)
+    {
+        try{
+            $data = Type::where("type",$type)->delete(); 
+            return response()->json(["deleted"], 200);
+        } catch(QueryException $a) {
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 }

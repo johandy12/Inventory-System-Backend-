@@ -24,7 +24,7 @@ class StocksController extends Controller
             $data = DB::table('stocks')
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
-                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.picture')
+                    ->select('type.type', 'brand.brand', 'stocks.id', 'stocks.itemName', 'stocks.quantity', 'stocks.quantityMinimum', 'stocks.basePrice', 'stocks.sellPrice', 'stocks.picture', 'stocks.description', 'stocks.size', 'stocks.itemLocation', 'stocks.purchaseLocation')
                     ->orderBy('stocks.itemName', 'asc')
                     ->get();
             return $data;
@@ -34,7 +34,7 @@ class StocksController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'no data is found'], 404);
+        }return response()->json(['error' => 'file is empty'], 404);
     }
     
     public function getItem($item)
@@ -45,7 +45,7 @@ class StocksController extends Controller
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
                     ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.basePrice', 'stocks.sellPrice',
                              'stocks.picture', 'size', 'stocks.itemLocation', 'stocks.description', 'stocks.purchaseLocation',
-                             'stocks.type_id', 'stocks.brand_id')
+                             'stocks.type_id', 'stocks.brand_id', 'stocks.quantityMinimum')
                     ->where('stocks.itemName', $item)
                     ->get();
             return $data;
@@ -75,7 +75,7 @@ class StocksController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'no data is found'], 404);
     }
 
     public function getStockBrand($brand)
@@ -85,7 +85,7 @@ class StocksController extends Controller
             $data = DB::table('stocks')
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
-                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice')
+                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.basePrice', 'stocks.size', 'stocks.itemLocation', 'stocks.purchaseLocation')
                     ->where('brand.id', '=', $brand)
                     ->get();
             return $data;
@@ -95,7 +95,7 @@ class StocksController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'not data is found'], 404);
     }
     
     public function getRestock()
@@ -109,7 +109,7 @@ class StocksController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'not data is found'], 404);
     }
     
     public function getNewStock()
@@ -122,7 +122,7 @@ class StocksController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'not data is found'], 404);
     }
 
     public function addStock(Request $request)
@@ -237,38 +237,17 @@ class StocksController extends Controller
             $data = Stocks::where('itemName', $item)->update($new);
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 
-    /*
-    //Update Last User
-    public function updateStockLastUser($id, Request $request)
-    {  
-        $payload = auth()->payload();
-        $pt = $payload->get('sub');
-
-        $new = [
-            "user_id"=> $pt,
-        ];
-
-        try{
-            Stocks::where('id',$id)->update($new);
-            return response()->json(["updated"],200);
-        }
-        catch(QueryException $a){
-            return response()->json(["Error" => "not found"], 404);
-        }
-    }
-    */
-
-    public function deleteStock($id)
+    public function deleteStock($item)
     {
         try{
-            $data = Stocks::where("id",$id)->delete(); 
+            $data = Stocks::where("itemName", $item)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 }

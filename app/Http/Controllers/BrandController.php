@@ -26,7 +26,7 @@ class BrandController extends Controller
 
       if(count($data) > 0){
           return response()->json($data);
-      }return response()->json(['error' => 'not found'], 404);
+      }return response()->json(['error' => 'file is empty'], 404);
   }
   
   public function addBrand(Request $request)
@@ -65,7 +65,25 @@ class BrandController extends Controller
           Brand::where('id',$id)->update($new);
           return response()->json(["updated"], 200);
       } catch(QueryException $a) {
-          return response()->json(["Error" => "not found"], 404);
+          return response()->json(["Error" => "no data is found"], 404);
+      }
+  }
+
+  public function updateBrand2($brand, Request $request)
+  {
+      $request->validate([
+          'brand'=> 'required',
+      ]);
+
+      $new = [
+          "brand" => $request->brand,
+      ];
+      
+      try{
+          Brand::where('brand',$brand)->update($new);
+          return response()->json(["updated"], 200);
+      } catch(QueryException $a) {
+          return response()->json(["Error" => "no data is found"], 404);
       }
   }
 
@@ -75,7 +93,17 @@ class BrandController extends Controller
           $data = Brand::where("id",$id)->delete(); 
           return response()->json(["deleted"], 200);
       } catch(QueryException $a) {
-          return response()->json(["Error" => "not found"], 404);
+          return response()->json(["Error" => "no data is found"], 404);
+      }
+  }
+  
+  public function deleteBrand2($brand)
+  {
+      try{
+          $data = Brand::where("brand",$brand)->delete(); 
+          return response()->json(["deleted"], 200);
+      } catch(QueryException $a) {
+          return response()->json(["Error" => "no data is found"], 404);
       }
   }
 }

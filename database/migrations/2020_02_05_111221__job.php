@@ -15,7 +15,7 @@ class Job extends Migration
     {
         Schema::create('job', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('job');
+            $table->string('job')->unique();
             $table->string('privilege');
         });
     }

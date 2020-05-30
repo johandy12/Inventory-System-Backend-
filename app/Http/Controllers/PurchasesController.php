@@ -18,17 +18,30 @@ class PurchasesController extends Controller
     {
         try {
             $data = Purchases::orderBy('updated_at', 'desc')->get();
-            $array = Array();
-            $array['data'] = $data;
+            return $data;
         } catch (QueryException $e) {
             return response()->json(['error' => "failed"], 404);
         }
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'file is empty'], 404);
     }
     
+    public function getSalesNo($salesNo)
+    {
+        try {
+            $data = Purchases::where('salesNo', $salesNo)->get();
+            return $data;
+        } catch (QueryException $e) {
+            return response()->json(['error' => "failed"], 404);
+        }
+
+        if(count($data) > 0){
+            return response()->json($data);
+        }return response()->json(['error' => 'no data is found'], 404);
+    }
+
     public function getMonthlyPurchasesTotal($month)
     {
         try {
@@ -43,11 +56,14 @@ class PurchasesController extends Controller
 
         if(count($data) > 0){
             return response()->json($data);
-        }return response()->json(['error' => 'not found'], 404);
+        }return response()->json(['error' => 'no data is found'], 404);
     }
-    
+
     public function addPurchases(Request $request)
     {
+        $purchases = new Purchases();
+
+        //Validation
         $request->validate([
             'salesNo'=> 'required',
             'sellerName'=> 'required',
@@ -57,44 +73,37 @@ class PurchasesController extends Controller
             'status'=> 'required',
         ]);
 
-        $new =
-        [
-            'salesNo'=> $request->salesNo,
-            'sellerName'=> $request->sellerName,
-            'paymentType'=> $request->paymentType,
-            'totalPrice'=> $request->totalPrice,
-            'tax'=> $request->tax,
-            'shipment'=> $request->shipment,
-            'description'=> $request->description,
-            'transactionDate'=> $request->transactionDate,
-            'status'=> $request->status,
-        ];
+        //Input
+        $purchases->salesNo = $request->input('salesNo');
+        $purchases->sellerName = $request->input('sellerName');
+        $purchases->paymentType = $request->input('paymentType');
+        $purchases->totalPrice = $request->input('totalPrice');
+        $purchases->tax = $request->input('tax');
+        $purchases->shipment = $request->input('shipment');
+        $purchases->description = $request->input('description');
+        $purchases->transactionDate = $request->input('transactionDate');
+        $purchases->status = $request->input('status');
 
-        if (! $request->has("tax") {
-            $new = $request->except(["tax"])
-        });
-        if (! $request->has("shipment") {
-            $new = $request->except(["shipment"])
-        });
-        if (! $request->has("description") {
-            $new = $request->except(["description"])
-        });
-        if (! $request->has("blank") {
-            $new = $request->except(["blank"])
-        });
-        
+        if ($purchases->tax == null) {
+            $purchases->tax = '0';
+        };
+        if ($purchases->shipment == null) {
+            $purchases->shipment = '0';
+        };
+        if ($purchases->description == null) {
+            $purchases->description = '';
+        };
+
         try
         {
-            $data = $this->purchases->create($new);
-            $array = Array();
-            $array['data'] = $data;
-            return response()->json($array);
+            $purchases->save();
+            return ($purchases);
         } catch(QueryException $a) {
             return response()->json(["Error" => $a], 404);
         }
     }
 
-    public function updatePurchases($id, Request $request)
+    public function updatePurchases($salesNo, Request $request)
     {
         $new =
         [
@@ -141,20 +150,20 @@ class PurchasesController extends Controller
         });
 
         try{
-            Purchases::where('id',$id)->update($new);
+            Purchases::where('salesNo', $salesNo)->update($new);
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 
-    public function deletePurchases($id)
+    public function deletePurchases($salesNo)
     {
         try{
-            $data = Purchases::where("id",$id)->delete(); 
+            $data = Purchases::where("salesNo", $salesNo)->delete(); 
             return response()->json(["deleted"], 200);
         } catch(QueryException $a) {
-            return response()->json(["Error" => "not found"], 404);
+            return response()->json(["Error" => "no data is found"], 404);
         }
     }
 }
