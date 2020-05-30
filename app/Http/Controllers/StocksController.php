@@ -238,8 +238,6 @@ class StocksController extends Controller
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
             return response()->json(["Error" => "no data is found"], 404);
-<<<<<<< HEAD
-=======
         }
     }
 
@@ -260,9 +258,9 @@ class StocksController extends Controller
         }
         catch(QueryException $a){
             return response()->json(["Error" => "not found"], 404);
->>>>>>> f4bf52af6149c2f64808177d2c65f29b02112a2f
         }
     }
+    */
 
     public function deleteStock($item)
     {
