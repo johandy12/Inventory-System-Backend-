@@ -8,9 +8,14 @@
         "php": ">=7.0.0",
         "barryvdh/laravel-cors": "1.x",
         "fideloper/proxy": "~3.3",
+<<<<<<< HEAD
         "fruitcake/laravel-cors": "^2.0",
+=======
+        "fruitcake/laravel-cors": "1.x",
+>>>>>>> f4bf52af6149c2f64808177d2c65f29b02112a2f
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
+        "spatie/laravel-permission": "^2.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

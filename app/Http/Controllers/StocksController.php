@@ -238,6 +238,29 @@ class StocksController extends Controller
             return response()->json(["updated"], 200);
         } catch(QueryException $a) {
             return response()->json(["Error" => "no data is found"], 404);
+<<<<<<< HEAD
+=======
+        }
+    }
+
+    /*
+    //Update Last User
+    public function updateStockLastUser($id, Request $request)
+    {  
+        $payload = auth()->payload();
+        $pt = $payload->get('sub');
+
+        $new = [
+            "user_id"=> $pt,
+        ];
+
+        try{
+            Stocks::where('id',$id)->update($new);
+            return response()->json(["updated"],200);
+        }
+        catch(QueryException $a){
+            return response()->json(["Error" => "not found"], 404);
+>>>>>>> f4bf52af6149c2f64808177d2c65f29b02112a2f
         }
     }
 
