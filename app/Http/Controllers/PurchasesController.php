@@ -108,7 +108,7 @@ class PurchasesController extends Controller
         $new =
         [
             'salesNo'=> $request->salesNo,
-            'sellerName'=> $request->customerName,
+            'sellerName'=> $request->sellerName,
             'paymentType'=> $request->paymentType,
             'totalPrice'=> $request->totalPrice,
             'tax'=> $request->tax,
