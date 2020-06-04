@@ -44,7 +44,7 @@ class StocksController extends Controller
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
                     ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.basePrice', 'stocks.sellPrice',
-                             'stocks.picture', 'size', 'stocks.itemLocation', 'stocks.description', 'stocks.purchaseLocation',
+                             'stocks.picture', 'stocks.size', 'stocks.itemLocation', 'stocks.description', 'stocks.purchaseLocation',
                              'stocks.type_id', 'stocks.brand_id', 'stocks.quantityMinimum')
                     ->where('stocks.itemName', $item)
                     ->get();
@@ -65,7 +65,7 @@ class StocksController extends Controller
             $data = DB::table('stocks')
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
-                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice')
+                    ->select('type.type', 'brand.brand', 'stocks.picture', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice')
                     ->where('type.id', '=', $type)
                     ->get();
             return $data;
@@ -85,7 +85,7 @@ class StocksController extends Controller
             $data = DB::table('stocks')
                     ->join('type', 'type.id', '=', 'stocks.type_id')
                     ->join('brand', 'brand.id', '=', 'stocks.brand_id')
-                    ->select('type.type', 'brand.brand', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.basePrice', 'stocks.size', 'stocks.itemLocation', 'stocks.purchaseLocation')
+                    ->select('type.type', 'brand.brand', 'stocks.picture', 'stocks.itemName', 'stocks.quantity', 'stocks.sellPrice', 'stocks.basePrice', 'stocks.size', 'stocks.itemLocation', 'stocks.purchaseLocation')
                     ->where('brand.id', '=', $brand)
                     ->get();
             return $data;
