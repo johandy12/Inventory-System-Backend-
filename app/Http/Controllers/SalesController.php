@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Sales;
+use App\Models\Invoice;
 use DB;
 
 class SalesController extends Controller
@@ -20,11 +21,31 @@ class SalesController extends Controller
         try {
             $data = DB::table('sales')
                     ->join('users', 'users.id', '=', 'sales.seller_id')
-                    ->select('users.name', 'sales.salesNo', 'sales.paymentType', 'sales.totalPrice', 'sales.tax',
+                    ->select('sales.id', 'users.name', 'sales.salesNo', 'sales.paymentType', 'sales.totalPrice', 'sales.tax',
                              'sales.shipment', 'sales.status', 'sales.transactionDate', 'sales.description', 
                              'sales.customerName')
                     ->orderBy('sales.transactionDate', 'desc')
                     ->get();
+            return $data;
+        } catch (QueryException $e) {
+            return response()->json(['error' => "failed"], 404);
+        }
+
+        if(count($data) > 0){
+            return response()->json($data);
+        }return response()->json(['error' => 'not found'], 404);
+    }
+
+    public function getSalesId($id)
+    {
+        try {
+            $data = Sales::with('invoice')
+                    ->join('users', 'users.id', '=', 'sales.seller_id')
+                    ->select('sales.id', 'users.name', 'sales.salesNo', 'sales.paymentType', 'sales.totalPrice', 'sales.tax',
+                             'sales.shipment', 'sales.status', 'sales.transactionDate', 'sales.description', 
+                             'sales.customerName')
+                    ->where('sales.id', $id)
+                    ->first();
             return $data;
         } catch (QueryException $e) {
             return response()->json(['error' => "failed"], 404);
@@ -40,7 +61,7 @@ class SalesController extends Controller
         try {
             $data = DB::table('sales')
                     ->join('users', 'users.id', '=', 'sales.seller_id')
-                    ->select('users.name', 'sales.salesNo', 'sales.paymentType', 'sales.totalPrice', 'sales.tax',
+                    ->select('sales.id', 'users.name', 'sales.salesNo', 'sales.paymentType', 'sales.totalPrice', 'sales.tax',
                              'sales.shipment', 'sales.status', 'sales.transactionDate', 'sales.description', 
                              'sales.customerName')
                     ->where('sales.salesNo', $salesNo)
@@ -54,7 +75,6 @@ class SalesController extends Controller
             return response()->json($data);
         }return response()->json(['error' => 'not found'], 404);
     }
-
 
     public function getNewSalesNo()
     {

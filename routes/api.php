@@ -85,7 +85,6 @@ Route::group([
 
 });
 
-
 Route::group([
 
     'middleware' => 'api',
@@ -94,12 +93,14 @@ Route::group([
 ], function ($router){
 
     route::get('', 'StocksController@getStock');
+    route::get('itemId/{id}', 'StocksController@getItemId');
     route::get('item/{item}', 'StocksController@getItem');
     route::get('type/{type}', 'StocksController@getStockType');
     route::get('brand/{brand}', 'StocksController@getStockBrand');
     route::get('restock', 'StocksController@getRestock');
     route::get('new', 'StocksController@getNewStock');
     Route::post('addItem', 'StocksController@addStock');
+    Route::post('updateItemId/{id}', 'StocksController@updateStockId');
     Route::post('updateItem/{item}', 'StocksController@updateStock');
     Route::delete('deleteItem/{item}', 'StocksController@deleteStock');
 
@@ -118,7 +119,7 @@ Route::group([
     route::get('salesNo/{salesNo}', 'InvoiceController@getInvoiceNo');
     route::get('salesPrice/{salesNo}', 'InvoiceController@getInvoicePrice');
     Route::post('addSales', 'InvoiceController@addInvoice');
-    Route::post('updateSales/{id}', 'InvoiceController@updateInvoice');
+    Route::post('updateSales/{salesNo}', 'InvoiceController@updateInvoice');
     Route::delete('deleteSales/{id}', 'InvoiceController@deleteInvoice');
     Route::delete('deleteSalesNo/{salesNo}', 'InvoiceController@deleteInvoiceNo');
 
@@ -127,7 +128,7 @@ Route::group([
     route::get('purchaseNo/{salesNo}', 'PurchaseInvoiceController@getInvoiceNo');
     route::get('purchasePrice/{salesNo}', 'PurchaseInvoiceController@getInvoicePrice');
     Route::post('addPurchase', 'PurchaseInvoiceController@addInvoice');
-    Route::post('updatePurchase/{id}', 'PurchaseInvoiceController@updateInvoice');
+    Route::post('updatePurchase/{salesNo}', 'PurchaseInvoiceController@updateInvoice');
     Route::delete('deletePurchase/{id}', 'PurchaseInvoiceController@deleteInvoice');
     Route::delete('deletePurchaseNo/{salesNo}', 'PurchaseInvoiceController@deleteInvoiceNo');
 
@@ -141,6 +142,7 @@ Route::group([
 ], function ($router){
 
     route::get('', 'SalesController@getSales');
+    route::get('salesId/{id}', 'SalesController@getSalesId');
     route::get('salesNo/{salesNo}', 'SalesController@getSalesNo');
     route::get('newSales', 'SalesController@getNewSalesNo');
     route::get('monthlySales/{month}', 'SalesController@getMonthlySalesTotal');
@@ -159,6 +161,7 @@ Route::group([
 ], function ($router){
 
     route::get('', 'PurchasesController@getPurchases');
+    route::get('salesId/{id}', 'PurchasesController@getSalesId');
     route::get('salesNo/{salesNo}', 'PurchasesController@getSalesNo');
     route::get('monthlyPurchase/{month}', 'PurchasesController@getMonthlyPurchasesTotal');
     Route::post('addPurchase', 'PurchasesController@addPurchases');

@@ -28,6 +28,20 @@ class PurchasesController extends Controller
         }return response()->json(['error' => 'file is empty'], 404);
     }
     
+    public function getSalesId($id)
+    {
+        try {
+            $data = Purchases::with('purchaseinvoice')->where('id', $id)->first();
+            return $data;
+        } catch (QueryException $e) {
+            return response()->json(['error' => "failed"], 404);
+        }
+
+        if(count($data) > 0){
+            return response()->json($data);
+        }return response()->json(['error' => 'no data is found'], 404);
+    }
+
     public function getSalesNo($salesNo)
     {
         try {

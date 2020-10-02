@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\Models\Invoice;
 
 class Sales extends Model
 {
@@ -13,5 +14,10 @@ class Sales extends Model
     
     public function seller(){
         return $this->hasOne("App\User", "seller_id");
+    }
+    
+    public function invoice()
+    {
+        return $this->hasMany('App\Models\Invoice', 'salesNo', 'salesNo');
     }
 }
